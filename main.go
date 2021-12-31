@@ -47,7 +47,7 @@ var books = []Book{
 func getBooks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(&BooksResponse{Message: "Books fetched successfully", Data: books, Status: true})
+	json.NewEncoder(w).Encode(BooksResponse{Message: "Books fetched successfully", Data: books, Status: true})
 }
 
 func getBook(w http.ResponseWriter, r *http.Request) {
@@ -62,7 +62,7 @@ func getBook(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	w.WriteHeader(http.StatusNotFound)
-	json.NewEncoder(w).Encode(&NotFound{Message: "Book not found", Status: false})
+	json.NewEncoder(w).Encode(NotFound{Message: "Book not found", Status: false})
 }
 
 func createBook(w http.ResponseWriter, r *http.Request) {
@@ -72,7 +72,7 @@ func createBook(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&book)
 	book.ID = strconv.Itoa(rand.Intn(10000000))
 	books = append(books, book)
-	json.NewEncoder(w).Encode(&BookResponse{Message: "Book created successfully", Data: book, Status: true})
+	json.NewEncoder(w).Encode(BookResponse{Message: "Book created successfully", Data: book, Status: true})
 }
 
 func updateBook(w http.ResponseWriter, r *http.Request) {
@@ -96,12 +96,12 @@ func updateBook(w http.ResponseWriter, r *http.Request) {
 			}
 			books = append(append(books[:index], book), books[index+1:]...)
 			w.WriteHeader(http.StatusOK)
-			json.NewEncoder(w).Encode(&BookResponse{Message: "Book updated successfully", Data: book, Status: true})
+			json.NewEncoder(w).Encode(BookResponse{Message: "Book updated successfully", Data: book, Status: true})
 			return
 		}
 	}
 	w.WriteHeader(http.StatusNotFound)
-	json.NewEncoder(w).Encode(&NotFound{Message: "Book not found", Status: false})
+	json.NewEncoder(w).Encode(NotFound{Message: "Book not found", Status: false})
 }
 
 func deleteBook(w http.ResponseWriter, r *http.Request) {
@@ -111,12 +111,12 @@ func deleteBook(w http.ResponseWriter, r *http.Request) {
 		if book.ID == id {
 			books = append(books[:index], books[index+1:]...)
 			w.WriteHeader(http.StatusOK)
-			json.NewEncoder(w).Encode(&BookResponse{Message: "Book deleted successfully", Data: book, Status: true})
+			json.NewEncoder(w).Encode(BookResponse{Message: "Book deleted successfully", Data: book, Status: true})
 			return
 		}
 	}
 	w.WriteHeader(http.StatusNotFound)
-	json.NewEncoder(w).Encode(&NotFound{Message: "Book not found", Status: false})
+	json.NewEncoder(w).Encode(NotFound{Message: "Book not found", Status: false})
 }
 
 
@@ -124,7 +124,7 @@ func main () {
 	// initialize the router
 	r := mux.NewRouter()
 
-	// Route handles & endpoints
+	// Route handlers & endpoints
 	r.HandleFunc("/api/books", getBooks).Methods("GET")
 	r.HandleFunc("/api/books/{id}", getBook).Methods("GET")
 	r.HandleFunc("/api/books", createBook).Methods("POST")
